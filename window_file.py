@@ -25,7 +25,7 @@ class ProgramWindow(QMainWindow, Filer):
         self.data = tuple()
 
         self.ui.buttonSaveLetters.clicked.connect(self.save_text)
-        self.ui.buttonReloadLetters.cliced.connect(self.update_letters)
+        self.ui.buttonReloadLetters.clicked.connect(self.update_letters)
         self.ui.actionSettings.triggered.connect(self.open_settings)
         self.ui.actionOpen.triggered.connect(self.load_xlsx_file)
 
