@@ -49,15 +49,6 @@ class XlsxFiler:
 
         return data
 
-    @staticmethod
-    def _open_txt():
-        with open('data.rcb', 'r', encoding='UTF-8') as file:
-            lines = file.readlines()
-            data = tuple(line.split('\t') for line in lines)
-        file.close()
-
-        return data
-
 
 class Filer(DocxFiler, TxtFiler, XlsxFiler):  # Класс работы с файлами
 

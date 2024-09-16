@@ -48,6 +48,10 @@ class ProgramWindow(QMainWindow, Filer):
         filetypes = (("Word документ", "*.docx"),)
         path = asksaveasfilename(filetypes=filetypes, title="Сохранить файл", initialdir="/",
                                  initialfile='example.docx')
+        idx = path.rfind('/')
+        file_name = path[idx + 1:]
+        if file_name.rfind('.') == -1:
+            path = path.replace(file_name, file_name + '.docx')
 
         try:
             self.save_docx(path, text)
@@ -63,6 +67,10 @@ class ProgramWindow(QMainWindow, Filer):
         filetypes = (("Файл блокнота", "*.txt"),)
         path = asksaveasfilename(filetypes=filetypes, title="Сохранить файл", initialdir="/",
                                  initialfile='example.txt')
+        idx = path.rfind('/')
+        file_name = path[idx + 1:]
+        if file_name.rfind('.') == -1:
+            path = path.replace(file_name, file_name + '.txt')
 
         try:
             self.save_txt(path, text)
