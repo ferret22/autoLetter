@@ -20,7 +20,7 @@ class TxtFiler:  # Класс записи писем в *.txt файлы
 
     @staticmethod
     def save_txt(path: str, file_text: str) -> None:
-        with open(path, 'w', encoding='UTF-8') as file:
+        with open(path, 'a', encoding='UTF-8') as file:
             file.write(file_text)
         file.close()
 
@@ -34,18 +34,20 @@ class XlsxFiler:
         full_names = my_dict.get('ФИО')
         count_skipping = my_dict.get('Кол-во пропусков')
         count_homework = my_dict.get('Сдача ДЗ')
+        topic = my_dict.get('Тема')
         problems = my_dict.get('Проблемы')
         problems_description = my_dict.get('Описание проблемы')
         solutions = my_dict.get('Решение проблемы')
 
-        with open('data.rcb', 'w', encoding='UTF-8') as file:
-            file.write('Номер\tФИО\tКол-во пропусков\tСдача ДЗ\tПроблемы\tОписание проблемы\tРешение проблемы\n')
-            for i in range(len(counts)):
-                file.write(f'{i + 1}\t{full_names[i]}\t{count_skipping[i]}\t{count_homework[i]}\t{problems[i]}'
-                           f'\t{problems_description[i]}\t{solutions[i]}\n')
-        file.close()
+        data = []
 
-        return self._open_txt()
+        for i in range(len(counts)):
+            dt = [str(i + 1), full_names[i], str(count_skipping[i]), str(count_homework[i]), str(topic[i]),
+                  problems[i], problems_description[i], solutions[i]]
+
+            data.append(dt)
+
+        return data
 
     @staticmethod
     def _open_txt():

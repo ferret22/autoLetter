@@ -22,7 +22,7 @@ class ProgramWindow(QMainWindow, Filer):
 
         self.letter_good = ''
         self.letter_bad = ''
-        self.data = tuple()
+        self.data: tuple[list[str], list[str]] = tuple()
 
         self.ui.buttonSaveLetters.clicked.connect(self.save_text)
         self.ui.buttonReloadLetters.clicked.connect(self.update_letters)
@@ -71,12 +71,48 @@ class ProgramWindow(QMainWindow, Filer):
             self.ms_error('Не найден файл сохранения!', 'Не найден файл сохранения!\nПовторите попытку',
                           'FileNotFoundError')
 
+    def format_text(self):
+        text = ''
+        for line in self.data:
+
+            match line[5].lower():
+                case 'да':
+                    full_name = line[1].split(' ')
+                    string = self.letter_bad
+                    string = string.replace('ФИО', line[1])
+                    string = string.replace('ТЕМА', line[4])
+                    string = string.replace('ИМЯ', full_name[1])
+
+                    if line[6].lower() == 'пропуск':
+                        string = string.replace('ПРОБЛЕМА', f'пропустил(а) {line[2]} занятий')
+                    elif line[6].lower() == 'нет дз':
+                        string = string.replace('ПРОБЛЕМА', f'пропустил(а) {line[2]} занятий и сдал(а) '
+                                                            f'{line[3]} домашних заданий')
+
+                    string = string.replace('МЕРЫ', line[7])
+                    string += '\n\n'
+                    text += string
+
+                case 'нет':
+                    full_name = line[1].split(' ')
+                    string = self.letter_good
+                    string = string.replace('ФИО', line[1])
+                    string = string.replace('ТЕМА', line[4])
+                    string = string.replace('ИМЯ', full_name[0])
+                    string += '\n\n'
+                    text += string
+
+                case _:
+                    continue
+
+        return text
+
     def save_text(self):
         if self.ui.radioSaveTXT.isChecked():
-            pass
+            self.save_txt_file(self.format_text())
 
         if self.ui.radioSaveDOCX.isChecked():
-            pass
+            self.save_docx_file(self.format_text())
 
     def open_settings(self):
         self.settings_win = SettingsWin(self.screen_geometry)
@@ -84,6 +120,7 @@ class ProgramWindow(QMainWindow, Filer):
 
     def update_letters(self):
         self.letter_good, self.letter_bad = self.load_letters()
+        self.show_msg_info('Скрипты обновлены! Можете закрывать окно!', 'Обновление скриптов')
 
     def load_xlsx_file(self):
         root = tk.Tk()
@@ -104,7 +141,7 @@ class ProgramWindow(QMainWindow, Filer):
                 text += string
 
             self.ui.textStudentsList.setText(text)
-            self.ui.lineStudentsNum.setText(str(len(self.data) - 1))
+            self.ui.lineStudentsNum.setText(str(len(self.data)))
 
         except FileNotFoundError:
             self.ms_error('Не найден файл загрузки!', 'Не найден файл загрузки!\nПовторите попытку',
