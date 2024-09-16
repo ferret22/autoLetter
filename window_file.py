@@ -100,13 +100,11 @@ class ProgramWindow(QMainWindow, Filer):
 
             text = ''
             for line in self.data:
-                string = ''
-                for word in line:
-                    string += word + '\t'
-                text += string + '\n'
+                string = f'{line[0]}\t\t{line[1]}\n'
+                text += string
 
             self.ui.textStudentsList.setText(text)
-            self.ui.lineStudentsNum.setText(str(len(self.data)))
+            self.ui.lineStudentsNum.setText(str(len(self.data) - 1))
 
         except FileNotFoundError:
             self.ms_error('Не найден файл загрузки!', 'Не найден файл загрузки!\nПовторите попытку',
