@@ -1,5 +1,6 @@
 from window_file import ProgramWindow, QApplication
 import sys
+import pyexcel_xlsx.xlsxr
 
 
 def start_program():
